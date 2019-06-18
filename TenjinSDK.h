@@ -1,4 +1,16 @@
 //
+// Created by Tenjin on 2019-05-17.
+// Copyright (c) 2019 Tenjin. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "TenjinSDK.h"
+
+
+@interface TenjinSDK (MoPubULAR)
++ (void)subscribeMoPubImpressions;
++ (void)mopubImpressionFromJSON:(NSString *)jsonString;
+@end//
 //  TenjinSDK.h
 //  TenjinSDK
 //
