@@ -20,7 +20,7 @@ jobs:
           name: "Update with latest release"
           command: "bundle exec rake release"
       - persist_to_workspace:
-          root: "~/tenjin-ios-sdk"
+          root: "~/project"
 
   github_push:
     docker:
@@ -39,10 +39,10 @@ jobs:
           paths:
             - "vendor/bundle"
       - attach_workspace:
-          at: "~/tenjin-ios-sdk"
+          at: "~/project"
       - run:
           name: "yeah"
-          command: "ls -thor ~/tenjin-ios-sdk"
+          command: "ls -thor ~/project"
 
 
 workflows:
