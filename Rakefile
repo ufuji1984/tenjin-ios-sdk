@@ -34,8 +34,9 @@ desc "Get new release assets and publish"
 task :release do
   version, assets, notes = get_release
 
-  puts notes
   puts version
+  puts notes
+  puts `ls -thor #{assets.map(&:name).join(" ")}`
   #update_pod(version)
   #commit_and_tag(version)
   #push_pod()
