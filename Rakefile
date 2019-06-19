@@ -41,6 +41,7 @@ task :release do
   puts `ls -thor #{assets.map(&:name).join(" ")}`
 
   Rake::Task['commit_and_push'].invoke([version])
+
   Rake::Task['github_release'].invoke([version, notes])
   #cocoapods release
 
@@ -48,7 +49,10 @@ end
 
 desc "Create new github release"
 task :github_release, [:version, :description] do |t,args|
-  unless args[:version] && args[:description]
+  puts "yo"
+  puts args
+  puts "ok"
+  unless args.version && args.description
     raise "Need new version and release notes to perform a release!"
   end
 
@@ -83,7 +87,7 @@ task :commit_and_push,[:version] do |t, args|
   `git config user.name "Tenjin"`
   `git config user.name "support@tenjin.com"`
 
-  `git commit -am "Version #{args[:version]}"`
+  `git commit -am "Version #{args[:version]} - [ci skip]"`
   `git push origin #{BRANCH}`
 end
 
