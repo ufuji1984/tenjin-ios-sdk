@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  fetch_release:
+  release:
     docker:
         - image: circleci/ruby:2.6.2
     steps:
@@ -17,46 +17,20 @@ jobs:
           paths:
             - "vendor/bundle"
       - run:
-          name: "Update with latest release"
+          name: "Release public sdk"
           command: "bundle exec rake release"
       - persist_to_workspace:
           root: "~/project"
           paths: 
           - "*"
 
-  github_push:
-    docker:
-        - image: circleci/ruby:2.6.2
-    steps:
-      - checkout:
-      - restore_cache:
-          keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2-
-      - run:
-          name: "Bundle install"
-          command: "bundle install --path vendor/bundle"
-      - save_cache:
-          key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
-          paths:
-            - "vendor/bundle"
-      - attach_workspace:
-          at: "~/project"
-      - run:
-          name: "yeah"
-          command: "ls -thor ~/project"
-
-
 workflows:
   version: 2
   release_flow:
     jobs:
-      - fetch_release
       - approve_release:
           type: approval
-          requires:
-            - fetch_release
-      - github_push:
+      - release:
           requires:
           - approve_release
 
