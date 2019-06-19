@@ -80,6 +80,9 @@ task :commit_and_push,[:version] do |t, args|
   puts "Updated files:"
   puts `git diff --name-only`
 
+  `git config user.name "Tenjin"`
+  `git config user.name "support@tenjin.com"`
+
   `git commit -am "Version #{args[:version]}"`
   `git push origin #{BRANCH}`
 end
