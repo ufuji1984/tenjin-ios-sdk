@@ -1,0 +1,64 @@
+version: 2
+jobs:
+  test:
+    docker:
+        - image: circleci/ruby:2.6.2
+    steps:
+      - checkout:
+      - restore_cache:
+          keys:
+            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v2-
+      - run:
+          name: "Bundle install"
+          command: "bundle install --path vendor/bundle"
+      - save_cache:
+          key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - "vendor/bundle"
+      - run:
+          name: "Hey i'm working"
+          command: "yeah babyyy"
+
+  github_push:
+    macos:
+      xcode: "9.3.0"
+    working_directory: "~/ios-sdk/TenjinSDK"
+    steps:
+      - checkout:
+          path: "~/ios-sdk"
+      - restore_cache:
+          keys:
+            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v2-
+      - run:
+          name: "Bundle install"
+          command: "bundle install --path vendor/bundle"
+      - save_cache:
+          key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - "vendor/bundle"
+      - attach_workspace:
+          at: "~/ios-sdk/TenjinSDK"
+      - run:
+          name: "Push release to github"
+          command: "bundle exec fastlane github_push"
+
+
+
+workflows:
+  version: 2
+  test_release:
+    jobs:
+      - test
+      - approve_release:
+          type: approval
+          requires:
+            - test
+      - github_push:
+          requires:
+          - approve_release
+
+
+
+
