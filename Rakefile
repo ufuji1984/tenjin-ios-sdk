@@ -5,6 +5,7 @@ require 'tmpdir'
 INTERNAL_REPO = "tenjin/ios-sdk"
 
 def get_release
+  puts "Fetching latest github release from #{INTERNAL_REPO}..."
   client = Octokit::Client.new(access_token: ENV["GITHUB_TOKEN"])
 
   release = client.latest_release INTERNAL_REPO
@@ -34,8 +35,10 @@ desc "Get new release assets and publish"
 task :release do
   version, assets, notes = get_release
 
-  puts version
+  puts "Version : #{version}"
   puts notes
+  puts " "
+  puts "Files: "
   puts `ls -thor #{assets.map(&:name).join(" ")}`
   #update_pod(version)
   #commit_and_tag(version)
