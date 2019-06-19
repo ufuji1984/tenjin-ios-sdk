@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test:
+  fetch_release:
     docker:
         - image: circleci/ruby:2.6.2
     steps:
@@ -19,14 +19,14 @@ jobs:
       - run:
           name: "Update with latest release"
           command: "bundle exec rake release"
+      - persist_to_workspace:
+          root: "~/tenjin-ios-sdk"
 
   github_push:
-    macos:
-      xcode: "9.3.0"
-    working_directory: "~/ios-sdk/TenjinSDK"
+    docker:
+        - image: circleci/ruby:2.6.2
     steps:
       - checkout:
-          path: "~/ios-sdk"
       - restore_cache:
           keys:
             - gem-cache-v2-{{ checksum "Gemfile.lock" }}
@@ -39,22 +39,21 @@ jobs:
           paths:
             - "vendor/bundle"
       - attach_workspace:
-          at: "~/ios-sdk/TenjinSDK"
+          at: "~/tenjin-ios-sdk"
       - run:
-          name: "Push release to github"
-          command: "bundle exec fastlane github_push"
-
+          name: "yeah"
+          command: "ls -thor ~/tenjin-ios-sdk"
 
 
 workflows:
   version: 2
   release_flow:
     jobs:
-      - test
+      - fetch_release
       - approve_release:
           type: approval
           requires:
-            - test
+            - fetch_release
       - github_push:
           requires:
           - approve_release
