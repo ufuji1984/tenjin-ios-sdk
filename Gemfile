@@ -1,4 +1,4 @@
 gem 'cocoapods'
-gem 'rake'
+gem 'rake', "~> 12"
 gem 'octokit'
 gem 'pry'
