@@ -21,6 +21,8 @@ jobs:
           command: "bundle exec rake release"
       - persist_to_workspace:
           root: "~/project"
+          paths: 
+          - "*"
 
   github_push:
     docker:
