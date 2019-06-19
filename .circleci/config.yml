@@ -28,11 +28,7 @@ workflows:
   version: 2
   release_flow:
     jobs:
-      - approve_release:
-          type: approval
       - release:
-          requires:
-          - approve_release
 
 
 
