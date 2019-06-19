@@ -40,9 +40,9 @@ task :release do
   puts "Files: "
   puts `ls -thor #{assets.map(&:name).join(" ")}`
 
-  Rake::Task['commit_and_push'].invoke([version])
+  Rake::Task['commit_and_push'].invoke(version)
 
-  Rake::Task['github_release'].invoke([version, notes])
+  Rake::Task['github_release'].invoke(version, notes)
   #cocoapods release
 
 end
@@ -64,11 +64,11 @@ task :github_release, [:version, :description] do |t,args|
 
   client = Octokit::Client.new(access_token: token)
 
-  unless client.releases(REPO_NAME).select{ |r| r.name == version}.empty?
-    raise "Release #{version} already present on the repo #{REPO_NAME} - please update the release notes!"
+  unless client.releases(REPO_NAME).select{ |r| r.name == args.version}.empty?
+    raise "Release #{args.version} already present on the repo #{REPO_NAME} - please update the release notes!"
   end
 
-  release = client.create_release(REPO_NAME, version, name: version, body: description)
+  release = client.create_release(REPO_NAME, args.version, name: args.version, body: args.description)
   assets.each { |a| client.upload_asset(release[:url], a, content_type: "text/plain") }
 end
 
@@ -87,7 +87,7 @@ task :commit_and_push,[:version] do |t, args|
   `git config user.name "Tenjin"`
   `git config user.name "support@tenjin.com"`
 
-  `git commit -am "Version #{args[:version]} - [ci skip]"`
+  `git commit -am "Version #{args.version} - [ci skip]"`
   `git push origin #{BRANCH}`
 end
 
