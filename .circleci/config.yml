@@ -17,8 +17,8 @@ jobs:
           paths:
             - "vendor/bundle"
       - run:
-          name: "Hey i'm working"
-          command: "yeah babyyy"
+          name: "Update with latest release"
+          command: "bundle exec rake release"
 
   github_push:
     macos:
@@ -48,7 +48,7 @@ jobs:
 
 workflows:
   version: 2
-  test_release:
+  release_flow:
     jobs:
       - test
       - approve_release:

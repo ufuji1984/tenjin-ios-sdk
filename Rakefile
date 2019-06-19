@@ -34,8 +34,8 @@ desc "Get new release assets and publish"
 task :release do
   version, assets, notes = get_release
 
-  update_pod(version)
-  commit_and_tag(version)
-  push_pod()
+  #update_pod(version)
+  #commit_and_tag(version)
+  #push_pod()
 end
 
