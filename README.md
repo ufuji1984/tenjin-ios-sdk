@@ -23,10 +23,10 @@ Tenjin initialization:
 ![Dashboard](https://s3.amazonaws.com/tenjin-instructions/ios_linker_flags.png "dashboard")
 
 ##### 5. Go to your AppDelegate file, by default `AppDelegate.m`, and `#import "TenjinSDK.h"`.
-##### 6. Get your `API_KEY` from your [Tenjin Organization tab](https://tenjin.io/dashboard/organizations).
+##### 6. Get your `TENJIN_API_KEY` from your [Tenjin Organization tab](https://tenjin.io/dashboard/organizations).
 ##### 7a. In your `didFinishLaunchingWithOptions` method add:
 ```objectivec
-[TenjinSDK init:@"<API_KEY>"];
+[TenjinSDK init:@"<TENJIN_API_KEY>"];
 [TenjinSDK connect];
 ```
 
@@ -39,7 +39,7 @@ Here's an example of what your integration should look like in your `AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TenjinSDK init:@"<API_KEY>"];
+    [TenjinSDK init:@"<TENJIN_API_KEY>"];
     [TenjinSDK connect];
 
     //All your other stuff
@@ -60,7 +60,7 @@ If you use other services to produce deferred deep links, you can pass Tenjin th
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
-    [TenjinSDK init:@"<API_KEY>"];
+    [TenjinSDK init:@"<TENJIN_API_KEY>"];
 
     //get your deep link from your other 3rd party service
     NSURL *url = [NSURL withString: @"your_deep_link"];
@@ -95,7 +95,7 @@ To opt-in/opt-out:
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
-  [TenjinSDK init:@"<API_KEY>"];
+  [TenjinSDK init:@"<TENJIN_API_KEY>"];
 
   if ([self checkOptInValue]) {
       [TenjinSDK optIn];
@@ -123,7 +123,7 @@ To opt-in/opt-out specific device-related parameters, you can use the `OptInPara
 If you want to only get specific device-related parameters, use `OptInParams()`. In example below, we will only these device-related parameters: `ip_address`, `advertising_id`, `developer_device_id`, `limit_ad_tracking`, `referrer`, and `iad`:
 
 ```objectivec
-[TenjinSDK init:@"<API_KEY>"];
+[TenjinSDK init:@"<TENJIN_API_KEY>"];
 
 NSArray *optInParams = @[@"ip_address", @"advertising_id", @"developer_device_id", @"limit_ad_tracking", @"referrer", @"iad"];
 [TenjinSDK optInParams:optInParams];
@@ -133,7 +133,7 @@ NSArray *optInParams = @[@"ip_address", @"advertising_id", @"developer_device_id
 
 If you want to send ALL parameters except specfic device-related parameters, use `OptOutParams()`.  In example below, we will send ALL device-related parameters except: `locale`, `timezone`, and `build_id` parameters.
 ```objectivec
-[TenjinSDK init:@"<API_KEY>"];
+[TenjinSDK init:@"<TENJIN_API_KEY>"];
 
 NSArray *optOutParams = @[@"country", @"timezone", @"language"];
 [TenjinSDK optOutParams:optOutParams];
@@ -240,7 +240,7 @@ Tenjin supports the ability to direct users to a specific part of your app after
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //initialize the Tenjin SDK like you normally would for attribution
-    [TenjinSDK init:@"<API_KEY>"];
+    [TenjinSDK init:@"<TENJIN_API_KEY>"];
     [TenjinSDK connect]
 
     //If you want to utilize the deeplink capabilities in Tenjin, utilize the registerDeepLinkHandler to retrieve the deferred_deeplink_url from the params NSDictionary object
@@ -266,7 +266,7 @@ You can also use the v1.7.2+ SDK for handling post-install logic using the `para
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //initialize the Tenjin SDK like you normally would for attribution
-    [TenjinSDK init:@"<API_KEY>"];
+    [TenjinSDK init:@"<TENJIN_API_KEY>"];
     [TenjinSDK connect]
 
     //If you want to utilize the deeplink capabilities in Tenjin, utilize the registerDeepLinkHandler to retrieve the deferred_deeplink_url from the params NSDictionary object
@@ -291,7 +291,21 @@ If you are running A/B tests and want to report the differences, we can append a
 This data will appear within DataVault where you will be able to run reports using the app subversion values. 
 
 ```
-[TenjinSDK init:@"<API_KEY>"];
+[TenjinSDK init:@"<TENJIN_API_KEY>"];
 [TenjinSDK appendAppSubversion:@8888];
 [TenjinSDK connect];
 ```
+
+Tenjin + MoPub Impression Level Ad Revenue Integration
+-------
+
+Tenjin supports the ability to integrate with the Impression Level Ad Revenue feature from MoPub, which allows you to receive events which correspond to your ad revenue is affected by each advertisment show to a user. To enable this, simply follow the below instuctions.
+
+> *NOTE* Please ensure you have the latest MoPub iOS SDK installed (> 5.7.0) and Impression Level Ad Revenue is enabled for your MoPub Account
+
+```
+[TenjinSDK init:@"TENJIN_API_KEY"];
+[TenjinSDK subscribeMoPubImpressions];
+
+```
+
